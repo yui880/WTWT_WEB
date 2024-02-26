@@ -11,6 +11,9 @@ const config: Config = {
       maxWidth: {
         400: '400px',
       },
+      fontFamily: {
+        Pretendard: ['Pretendard'],
+      },
       colors: {
         primary: {
           main: '#3C70FF',
