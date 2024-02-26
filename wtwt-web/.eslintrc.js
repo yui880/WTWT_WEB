@@ -36,6 +36,24 @@ module.exports = {
     'react/jsx-key': 'warn', // 반복문으로 생성하는 요소에 key 강제
     'react/self-closing-comp': 'warn', // 셀프 클로징 태그 가능하면 적용
     'react/jsx-curly-brace-presence': 'warn', // jsx 내 불필요한 중괄호 금지
+    'react/react-in-jsx-scope': 'off', // react import 없이 사용하기
+    '@typescript-eslint/member-delimiter-style': [
+      // 구분 기호 스타일 설정
+      'error',
+      {
+        multiline: {
+          delimiter: 'semi',
+          requireLast: true,
+        },
+        singleline: {
+          delimiter: 'comma',
+          requireLast: false,
+        },
+      },
+    ],
+    'comma-dangle': [2, 'always-multiline'],
+    semi: ['error', 'always'],
+    '@typescript-eslint/semi': 'off',
   },
   ignorePatterns: ['.eslintrc.js'],
 };
