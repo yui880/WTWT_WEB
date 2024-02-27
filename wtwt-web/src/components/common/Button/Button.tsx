@@ -7,18 +7,16 @@ export interface ButtonProps {
   disabled: boolean;
 }
 
-const Button = ({ children, className, onClick, disabled }: ButtonProps) => {
+export const Button = ({ children, className, onClick, disabled }: ButtonProps) => {
   return (
     <button
       className={`h-65 w-full rounded-lg py-4 text-center ${disabled ? 'bg-gray-300' : 'bg-primary-main'} ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
-      <span className={`text-lg font-bold ${disabled ? 'text-gray-600' : 'text-white'}`}>
+      <span className={`text-lg font-semibold ${disabled ? 'text-gray-600' : 'text-white'}`}>
         {children}
       </span>
     </button>
   );
 };
-
-export default Button;
