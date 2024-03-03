@@ -14,7 +14,7 @@ export const Button = ({ children, className, onClick, disabled }: ButtonProps) 
       onClick={onClick}
       disabled={disabled}
     >
-      <span className={`text-lg font-semibold ${disabled ? 'text-gray-600' : 'text-white'}`}>
+      <span className={`text-lg font-medium ${disabled ? 'text-gray-600' : 'text-white'}`}>
         {children}
       </span>
     </button>

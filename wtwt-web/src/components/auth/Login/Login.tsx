@@ -26,7 +26,7 @@ export const Login = () => {
 
   const canSubmit = id !== '' && password !== '';
 
-  const submitHandler = useCallback(async () => {}, [id, password]);
+  const submitHandler = useCallback(() => {}, [id, password]);
 
   return (
     <div className="h-dvh w-full bg-white font-Pretendard" style={{ height: `${height}px` }}>
@@ -36,7 +36,7 @@ export const Login = () => {
         </div>
         <div className="flex h-4/6 w-full flex-col gap-5 ">
           <Input
-            label="이메일"
+            label="이메일 주소"
             placeholder="이메일을 입력해주세요"
             value={id}
             onChange={(val) => {
@@ -57,7 +57,7 @@ export const Login = () => {
               로그인하기
             </Button>
             <button
-              className="text-xs text-text-title hover:font-semibold hover:text-gray-600"
+              className="text-xs text-text-title hover:font-medium hover:text-gray-600"
               onClick={goToSignUp}
             >
               회원 가입하기
