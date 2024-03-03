@@ -10,7 +10,7 @@ export interface ButtonProps {
 export const Button = ({ children, className, onClick, disabled }: ButtonProps) => {
   return (
     <button
-      className={`h-65 w-full rounded-lg py-4 text-center ${disabled ? 'bg-gray-300' : 'bg-primary-main'} ${className}`}
+      className={`h-16 w-full rounded-lg py-4 text-center ${disabled ? 'bg-gray-300' : 'bg-primary-main'} ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
