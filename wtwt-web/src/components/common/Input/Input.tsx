@@ -17,13 +17,13 @@ export const Input = ({
 }: InputProps) => {
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-sm font-semibold text-text-inputLabel">{label}</span>
+      <span className="text-sm text-text-inputLabel">{label}</span>
       <div
-        className={`h-55 rounded-lg bg-primary-background px-3 py-4 font-normal ${className} ${isError ? 'border-2 border-primary-subMain' : ''}`}
+        className={`h-55 rounded-xl bg-primary-background px-3 py-4 ${className} ${isError ? 'border-2 border-primary-subMain' : ''}`}
       >
         <input
           type={secureTextEntry ? 'password' : 'text'}
-          className="w-full bg-transparent text-base font-medium text-text-inputLabel outline-none placeholder:text-text-placeHolder"
+          className="w-full bg-transparent text-base text-text-inputLabel outline-none placeholder:font-light placeholder:text-text-placeHolder"
           value={value}
           onChange={onChange}
           placeholder={placeholder}
