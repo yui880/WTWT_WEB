@@ -10,7 +10,7 @@ export const BackDrop = ({ children, className = '', closeModal }: BackDropProps
   return (
     <div
       className={
-        'fixed left-0 top-0 flex h-full w-full justify-center bg-gray-600 opacity-50' +
+        'fixed left-0 top-0 flex h-full w-full justify-center bg-gray-600 bg-opacity-50' +
         (className.length > 0 ? ` ${className}` : ' items-center')
       }
       onClick={closeModal}

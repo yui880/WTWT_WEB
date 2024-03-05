@@ -22,6 +22,7 @@ export const Modal = ({ children, className, isOpen, closeModal }: ModalProps) =
         <div className="flex h-full w-full">
           <BackDrop className={className} closeModal={closeHandler}>
             <div
+              className="fade-in"
               onClick={(e) => {
                 e.stopPropagation();
               }}
