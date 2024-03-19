@@ -2,6 +2,7 @@ import { Header } from '@component/components/common/Header';
 import { Container } from '@component/components/common/Container';
 import { PostTitle } from '@component/components/post/PostDetail/PostTitle';
 import { type PostType } from '@component/types/post';
+import { PostInfo } from '@component/components/post/PostDetail/PostInfo';
 
 const tempPost: PostType = {
   post_id: 1,
@@ -54,6 +55,14 @@ export const PostDetail = () => {
         postDate={tempPost.postDate}
         hits={tempPost.hits}
         writer={tempPost.writer}
+        category={tempPost.category}
+      />
+      <PostInfo
+        firstDate={tempPost.firstDay}
+        lastDate={tempPost.lastDay}
+        tags={tempPost.tags}
+        members={tempPost.members}
+        preference={tempPost.preference}
       />
     </Container>
   );

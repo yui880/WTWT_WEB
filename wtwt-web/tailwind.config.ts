@@ -18,6 +18,7 @@ const config: Config = {
         primary: {
           main: '#3C70FF',
           subMain: '#6A92FF',
+          sub2: '#E0E8FE',
           background: '#F8F8F9',
         },
         text: {

@@ -25,12 +25,7 @@ interface PostType {
   lastDay: Date;
   tags: string[];
   members: MemberType[];
-  preference: {
-    gender: string;
-    minAge: number;
-    maxAge: number;
-    preferHeadCount: number;
-  };
+  preference: PreferenceType;
   content: string;
   images: ImageType[];
   category: CategoryType;
@@ -39,4 +34,11 @@ interface PostType {
 interface CategoryType {
   id: number;
   name: string;
+}
+
+interface PreferenceType {
+  gender: string;
+  minAge: number;
+  maxAge: number;
+  preferHeadCount: number;
 }
