@@ -42,6 +42,10 @@ body {
     animation: fadeIn 1s ease 0s 1 normal forwards;
 }
 
+.fade-in-fast {
+    animation: fadeIn 0.2s ease 0s 1 normal forwards;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
