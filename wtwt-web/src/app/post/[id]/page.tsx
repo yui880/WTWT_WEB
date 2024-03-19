@@ -1,15 +1,11 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Header } from '@component/components/common/Header';
+import { PostDetail } from '@component/components/post/PostDetail';
 
 const Post = (props: any) => {
   const pathname = usePathname();
-  return (
-    <div>
-      <Header goBackButton={true} />
-    </div>
-  );
+  return <PostDetail />;
 };
 
 export default Post;
