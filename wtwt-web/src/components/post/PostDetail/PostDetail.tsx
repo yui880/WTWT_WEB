@@ -87,7 +87,7 @@ export const PostDetail = () => {
         preference={tempPost.preference}
       />
       <PostContent content={tempPost.content} images={tempPost.images} />
-      <div className="fixed bottom-0 w-full max-w-md px-6 py-4">
+      <div className="fixed bottom-0 w-full max-w-md border-0 bg-white px-6 py-4">
         <Button className="box-border w-full flex-auto" onClick={clickHandler} disabled={false}>
           1:1 채팅하기
         </Button>

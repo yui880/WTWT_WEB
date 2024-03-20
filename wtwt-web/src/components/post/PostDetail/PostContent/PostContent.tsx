@@ -1,8 +1,6 @@
 import { type ImageType } from '@component/types/image';
 import Image from 'next/image';
 import { useModal } from '@component/hooks/useModal';
-import { Simulate } from 'react-dom/test-utils';
-import click = Simulate.click;
 import { useState } from 'react';
 
 interface PostContentProps {
@@ -21,7 +19,7 @@ export const PostContent = ({ content, images }: PostContentProps) => {
 
   return (
     <>
-      <div className="flex flex-col gap-6 px-6 py-8">
+      <div className="flex flex-col gap-6 px-6 pb-32 pt-8">
         <div className="text-sm">{content}</div>
         <div className="flex flex-row gap-3">
           {images.map(({ uri, name }, i) => {
