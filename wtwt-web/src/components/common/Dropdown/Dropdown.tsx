@@ -39,7 +39,7 @@ export const Dropdown = ({ isCategory, dataList, onSelectId, onSelectName }: Dro
       </div>
       {isVisible && (
         <div
-          className={`absolute top-14 flex flex-col gap-2 rounded-md px-4 py-3 shadow-sm shadow-zinc-400 transition-all duration-300 ${
+          className={`absolute top-14 z-10 flex flex-col gap-2 rounded-md bg-white px-4 py-3 shadow-sm shadow-zinc-400 transition-all duration-300 ${
             isVisible ? 'opacity-100' : 'opacity-0'
           }`}
         >
