@@ -8,9 +8,10 @@ interface ModalProps {
   className?: string;
   isOpen: boolean;
   closeModal: () => void;
+  fastSpeed?: boolean;
 }
 
-export const Modal = ({ children, className, isOpen, closeModal }: ModalProps) => {
+export const Modal = ({ children, className, isOpen, closeModal, fastSpeed }: ModalProps) => {
   usePreventScroll({ isOpen });
   const closeHandler = (e: React.MouseEvent<HTMLElement>) => {
     closeModal();
@@ -22,7 +23,7 @@ export const Modal = ({ children, className, isOpen, closeModal }: ModalProps) =
         <div className="flex h-full w-full">
           <BackDrop className={className} closeModal={closeHandler}>
             <div
-              className="fade-in"
+              className={fastSpeed === true ? 'fade-in-fast' : 'fade-in'}
               onClick={(e) => {
                 e.stopPropagation();
               }}
