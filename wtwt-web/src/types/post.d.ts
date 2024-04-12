@@ -23,6 +23,7 @@ interface PostType {
   lightning: boolean;
   firstDay: Date;
   lastDay: Date;
+  likes: number;
   tags: string[];
   members: MemberType[];
   preference: PreferenceType;

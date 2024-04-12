@@ -25,7 +25,7 @@ export const PostContent = ({ content, images }: PostContentProps) => {
           {images.map(({ uri, name }, i) => {
             return (
               <Image
-                className="rounded-xl"
+                className="h-28 w-28 rounded-xl object-cover"
                 key={name + i}
                 src={uri}
                 alt={name}
