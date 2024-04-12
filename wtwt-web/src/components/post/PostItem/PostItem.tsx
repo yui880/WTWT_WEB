@@ -1,10 +1,11 @@
 import { type PostItemType } from '@component/types/post';
 import Image from 'next/image';
 import { PostStatus } from '@component/components/post/PostItem/PostStatus';
-import HeadCount from '../../../../public/headcount.svg';
-import Hits from '../../../../public/hits.svg';
 import { useRouter } from 'next/navigation';
-import { type SyntheticEvent } from 'react';
+import React, { type SyntheticEvent } from 'react';
+import { IoMdHeart } from 'react-icons/io';
+import { FaUser } from 'react-icons/fa6';
+import { IoEye } from 'react-icons/io5';
 export const PostItem = ({
   id,
   writer,
@@ -36,24 +37,28 @@ export const PostItem = ({
           width={25}
           height={25}
         />
-        <span className="text-text-gray500 text-sm">{writer.nickname}</span>
+        <span className="text-sm text-text-gray500">{writer.nickname}</span>
       </div>
       <div className="flex flex-col gap-1">
-        <div className="text-base font-medium text-text-general">{title}</div>
-        <div className="text-text-gray200 min-h-7 text-xs font-light">{content}</div>
+        <div className="text-base font-semibold text-text-general">{title}</div>
+        <div className="min-h-7 text-xs font-light text-text-title">{content}</div>
       </div>
       <div className="flex flex-row items-center justify-between">
         <PostStatus isLightning={isLightning} />
-        <div className="flex flex-row gap-3">
+        <div className="mr-1.5 flex flex-row gap-3">
           <div className="flex flex-row gap-1">
-            <Image src={HeadCount} alt="h" width={17} />
-            <div className="text-text-gray200 text-xs">
+            <FaUser size={12} className="text-primary-subMain" />
+            <div className="text-xs text-text-gray200">
               {headCount} / {preferHeadCount}
             </div>
           </div>
-          <div className="mr-1 flex flex-row gap-1">
-            <Image src={Hits} alt="h" width={17} />
-            <div className="text-text-gray200 text-xs">{hits}</div>
+          <div className="flex flex-row gap-1.5">
+            <IoEye size={15} className="text-primary-subMain" />
+            <div className="text-xs text-text-gray200">{hits}</div>
+          </div>
+          <div className="flex flex-row gap-1">
+            <IoMdHeart size={15} className="text-primary-subMain" />
+            <div className="text-xs text-text-gray200">{hits * 20}</div>
           </div>
         </div>
       </div>
