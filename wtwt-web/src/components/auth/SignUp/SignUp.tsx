@@ -4,6 +4,7 @@ import { Button } from '@component/components/common/Button';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@component/hooks/useModal';
 import Image from 'next/image';
+import axios from 'axios';
 
 export const SignUp = () => {
   const height = window.innerHeight;
@@ -30,12 +31,40 @@ export const SignUp = () => {
   const canSubmit = email !== '' && password !== '' && checkPwd !== '';
 
   const submitHandler = useCallback(async () => {
+    if (
+      !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
+        email,
+      )
+    ) {
+      alert('올바른 이메일 주소가 아닙니다.');
+      return;
+    }
+    if (!/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@^!%*#?&]).{8,50}$/.test(password)) {
+      alert('비밀번호는 영문,숫자,특수문자($@^!%*#?&)를 모두 포함하여 8자 이상 입력해야합니다.');
+      return;
+    }
     if (password !== checkPwd) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-    // alert('회원가입 성공!');
-    openModal();
+
+    try {
+      const createUser = async () => {
+        const signUpData = { email, password };
+        const response = await axios.post(
+          process.env.NEXT_PUBLIC_API_KEY + '/api/v1/users',
+          signUpData,
+        );
+
+        console.log(response);
+      };
+
+      await createUser();
+      openModal();
+    } catch (error) {
+      console.log(error);
+      alert('회원가입 도중 오류가 발생하였습니다.');
+    }
   }, [password, checkPwd, router, isOpen]);
 
   return (
