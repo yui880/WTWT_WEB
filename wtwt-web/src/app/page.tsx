@@ -90,6 +90,7 @@ export default function Home() {
           <Link href="/auth/login">로그인</Link>
           <Link href="/home">메인화면</Link>
           <Link href="mypage/profile">프로필 설정</Link>
+          <Link href="/post/write">글 작성</Link>
         </div>
       </main>
       <Modal isOpen={isOpen} closeModal={closeModal}>
