@@ -4,13 +4,16 @@ import { Button } from '@component/components/common/Button';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@component/hooks/useModal';
 import Image from 'next/image';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const SignUp = () => {
   const height = window.innerHeight;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [checkPwd, setCheckPwd] = useState('');
+  const [duplicatedMessage, setDuplicatedMessage] = useState('');
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+
   const { Modal, isOpen, openModal, closeModal } = useModal();
 
   const router = useRouter();
@@ -27,6 +30,36 @@ export const SignUp = () => {
         break;
     }
   };
+
+  const handleDuplicatedClick = useCallback(async () => {
+    if (!email?.trim()) return;
+    if (
+      !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
+        email,
+      )
+    ) {
+      setIsEmailChecked(false);
+      setDuplicatedMessage('유효하지 않은 이메일 형식입니다.');
+      return;
+    }
+    try {
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_API_KEY + '/api/v1/users/email/check',
+        { email },
+      );
+      const { isDuplicated } = response.data;
+
+      if (!isDuplicated) {
+        setDuplicatedMessage('중복 이메일 여부가 확인되었습니다.');
+        setIsEmailChecked(true);
+      } else {
+        setIsEmailChecked(false);
+        setDuplicatedMessage('이미 존재하는 이메일입니다.');
+      }
+    } catch (e) {
+      console.log((e as AxiosError).message);
+    }
+  }, [email]);
 
   const canSubmit = email !== '' && password !== '' && checkPwd !== '';
 
@@ -61,6 +94,7 @@ export const SignUp = () => {
 
       await createUser();
       openModal();
+      router.push('/auth/login');
     } catch (error) {
       console.log(error);
       alert('회원가입 도중 오류가 발생하였습니다.');
@@ -73,14 +107,28 @@ export const SignUp = () => {
         <div className="flex h-full flex-col justify-center gap-10 p-7">
           <div className="mb-3 mt-5 text-xl font-semibold">회원가입</div>
           <div className="flex flex-1 flex-col gap-5 ">
-            <Input
-              label="이메일"
-              placeholder="이메일을 입력해주세요."
-              value={email}
-              onChange={(val) => {
-                updateInputHandler('email', val);
-              }}
-            />
+            <div className="flex flex-col gap-2">
+              <Input
+                label="이메일"
+                placeholder="이메일을 입력해주세요."
+                value={email}
+                onChange={(val) => {
+                  updateInputHandler('email', val);
+                }}
+              />
+              <div className="flex flex-row items-center gap-3">
+                <button
+                  className={`rounded-md  p-2 text-sm  shadow-md ${!isEmailChecked ? 'bg-primary-background text-text-inputLabel' : 'bg-primary-subMain text-white'}`}
+                  onClick={handleDuplicatedClick}
+                >
+                  중복 이메일 확인
+                </button>
+                <p className={`text-sm ${isEmailChecked ? 'text-primary-main' : 'text-red-500'}`}>
+                  {duplicatedMessage}
+                </p>
+              </div>
+            </div>
+
             <Input
               label="비밀번호"
               placeholder="비밀번호를 입력해주세요."
