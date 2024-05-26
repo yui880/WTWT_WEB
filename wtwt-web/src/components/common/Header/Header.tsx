@@ -16,7 +16,7 @@ export const Header = ({ className, label = '', rightButton }: HeaderProps) => {
 
   return (
     <div
-      className={`flex h-14 w-full flex-row items-center justify-between bg-white px-2 ${className}`}
+      className={`flex h-14 w-full flex-row items-center justify-between px-2 ${className || 'bg-white'}`}
     >
       <button className="flex w-10 items-center justify-center" onClick={goBackHandler}>
         <IoIosArrowBack size={22} />
