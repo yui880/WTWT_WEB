@@ -2,7 +2,7 @@ import { Container } from '@component/components/common/Container';
 import { Button } from '@component/components/common/Button';
 import Image from 'next/image';
 import { useModal } from '@component/hooks/useModal';
-import { useCallback, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { type ImageType } from '@component/types/image';
 import { InputForHook } from '@component/components/common/Input/InputForHook';
@@ -19,19 +19,11 @@ export interface IProfileForm {
 }
 
 export const Profile = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const fileInputRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImagePath, setSelectedImagePath] = useState<string | null>(null);
+  const [isClicked, setIsClicked] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // 이미지 선택 핸들러
-  const handleImageSelect = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-  };
-
-  // 이미지 입력창 열기
-  const openImageInput = () => {
-    fileInputRef.current.click();
-  };
   const {
     watch,
     register,
@@ -41,6 +33,27 @@ export const Profile = () => {
     setError,
   } = useForm<IProfileForm>({ mode: 'onBlur', defaultValues: { gender: 'FEMALE' } });
   const { Modal, isOpen, openModal, closeModal } = useModal();
+
+  // 이미지 선택 핸들러
+  const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsClicked(true);
+    if (event.target.files) {
+      const file = event.target.files[0];
+      setSelectedImage(file);
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setSelectedImagePath(reader.result as string);
+      };
+    }
+    setIsClicked(false);
+  };
+
+  // 이미지 입력창 열기
+  const openImageInput = () => {
+    fileInputRef?.current?.click();
+  };
 
   const canSubmit = true;
 
@@ -56,9 +69,17 @@ export const Profile = () => {
         <div className="flex flex-1 flex-col">
           <form className="flex flex-col gap-4">
             <div className="mb-7 flex items-center justify-center">
-              <label htmlFor="imageInput" onClick={openImageInput}>
-                <FaUserCircle size={130} className="text-neutral-300" />
-              </label>
+              <button type="button" onClick={openImageInput} disabled={isClicked}>
+                {selectedImagePath ? (
+                  <img
+                    alt="profileImage"
+                    src={selectedImagePath}
+                    className="h-[130px] w-[130px] rounded-full"
+                  />
+                ) : (
+                  <FaUserCircle size={130} className="text-neutral-300" />
+                )}
+              </button>
               <input
                 type="file"
                 id="imageInput"
@@ -68,12 +89,9 @@ export const Profile = () => {
                 onChange={handleImageSelect}
               />
             </div>
-
             <InputForHook
               label="닉네임"
-              register={register('nickname', {
-                required: '중복된 닉네임입니다.',
-              })}
+              register={register('nickname')}
               placeholder="닉네임을 입력해주세요"
               errorMessage={errors.nickname?.message}
             />
