@@ -5,6 +5,7 @@ interface InputForHookPropsType {
   register: UseFormRegisterReturn;
   placeholder: string;
   errorMessage: string | undefined;
+  className?: string;
 }
 
 export const InputForHook = ({
@@ -12,12 +13,13 @@ export const InputForHook = ({
   register,
   placeholder,
   errorMessage,
+  className,
 }: InputForHookPropsType) => {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex w-full flex-col gap-1">
       <span className="text-sm text-text-inputLabel">{label}</span>
       <div
-        className={`h-55 rounded-xl bg-primary-background px-3 py-4 ${errorMessage !== undefined ? 'border-2 border-rose-400' : ''}`}
+        className={`h-55 w-full rounded-xl bg-primary-background px-3 py-4 ${errorMessage !== undefined ? 'border-2 border-rose-400' : ''}`}
       >
         <input
           className="} w-full bg-transparent text-base text-text-inputLabel outline-none placeholder:font-light placeholder:text-text-placeHolder"
