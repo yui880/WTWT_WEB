@@ -1,6 +1,6 @@
 import { Container } from '@component/components/common/Container';
 import { Header } from '@component/components/common/Header';
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { categoryList } from '@component/components/common/Header/MainHeader';
 import { DropdownForHook } from '@component/components/common/Dropdown/DropdownForHook';
 import { RadioForHook, RadioGroup } from '@component/components/common/Radio';
@@ -10,6 +10,7 @@ import { InputForHook } from '@component/components/common/Input/InputForHook';
 import { IoCameraOutline } from 'react-icons/io5';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { FiPlus } from 'react-icons/fi';
+import Checkbox from '@component/components/common/Checkbox/Checkbox';
 
 export interface IProfileForm {
   category: CategoryType;
@@ -36,7 +37,7 @@ export const NewPost = () => {
     setError,
   } = useForm<IProfileForm>({
     mode: 'onBlur',
-    defaultValues: { groupSize: 0, preferMinAge: 10, preferMaxAge: 70 },
+    defaultValues: { thunder: false, groupSize: 0, preferMinAge: 10, preferMaxAge: 70 },
   });
   const [categoryId, setCategoryId] = useState<number>(1);
   const [categoryName, setCategoryName] = useState<string>('전체');
@@ -88,14 +89,13 @@ export const NewPost = () => {
           onSelectId={setCategoryId}
           onSelectName={setCategoryName}
         />
-        <RadioForHook
+        <Checkbox
           register={register('thunder')}
-          checked={false}
-          value=""
+          checked={watch('thunder')}
           className="text-text-title"
         >
           번개만남으로 올리기
-        </RadioForHook>
+        </Checkbox>
         <div className="flex w-full flex-col items-start justify-start gap-2">
           <InputForHook
             label=""
@@ -106,7 +106,7 @@ export const NewPost = () => {
           />
           <div className="flex h-80 w-full items-start justify-start rounded-lg bg-primary-background px-4 py-5 text-text-title ">
             <textarea
-              className="flex h-full w-full bg-primary-background outline-none placeholder:text-text-placeHolder "
+              className="flex h-full w-full resize-none bg-primary-background outline-none placeholder:text-text-placeHolder"
               placeholder="내용을 입력해주세요"
               {...register('content')}
             />
