@@ -11,12 +11,14 @@ import { IoCameraOutline } from 'react-icons/io5';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { FiPlus } from 'react-icons/fi';
 import Checkbox from '@component/components/common/Checkbox/Checkbox';
+import axios, { AxiosError } from 'axios';
 
 export interface IProfileForm {
   category: CategoryType;
   thunder: boolean;
   title: string;
   content: string;
+  urls: string[];
   startDate: Date;
   endDate: Date;
   groupSize: number;
@@ -37,28 +39,57 @@ export const NewPost = () => {
     setError,
   } = useForm<IProfileForm>({
     mode: 'onBlur',
-    defaultValues: { thunder: false, groupSize: 0, preferMinAge: 10, preferMaxAge: 70 },
+    defaultValues: { thunder: false, urls: [], groupSize: 0, preferMinAge: 10, preferMaxAge: 70 },
   });
   const [categoryId, setCategoryId] = useState<number>(1);
   const [categoryName, setCategoryName] = useState<string>('전체');
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePathList, setImagePathList] = useState<string[]>([]);
   const [isClicked, setIsClicked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     setIsClicked(true);
+
+    if (imagePathList.length >= 10) {
+      alert('사진은 10장만 첨부할 수 있습니다.');
+      return;
+    }
+
     if (event.target.files) {
       const file = event.target.files[0];
-      setSelectedImage(file);
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
         setImagePathList((prev) => [...prev, reader.result as string]);
       };
+
+      const fileUrl = await submitImageFile(file);
+      const prevUrls = getValues('urls');
+      setValue('urls', [...prevUrls, fileUrl]);
     }
     setIsClicked(false);
+  };
+
+  const submitImageFile = async (imageFile: File) => {
+    try {
+      const imageData = new FormData();
+      imageData.append('file', imageFile);
+
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_API_KEY + '/api/v1/file',
+        imageData,
+        {
+          headers: { 'content-type': 'multipart/form-data' },
+        },
+      );
+      const { fileUrl } = response.data;
+
+      return fileUrl;
+    } catch (e) {
+      const errorResponse = (e as AxiosError).response;
+      console.log(errorResponse);
+    }
   };
 
   const openImageInput = () => {
@@ -74,8 +105,6 @@ export const NewPost = () => {
     const currentValue = getValues('groupSize');
     if (currentValue > 0) setValue('groupSize', currentValue - 1);
   };
-
-  const onClick = () => {};
 
   return (
     <Container>
@@ -116,7 +145,7 @@ export const NewPost = () => {
               <button onClick={openImageInput} disabled={isClicked}>
                 <div className="flex h-20 w-20 flex-col items-center justify-center rounded-xl bg-primary-subMain">
                   <IoCameraOutline size={32} className="text-white" />
-                  <div className="text-sm text-white">0/10</div>
+                  <div className="text-sm text-white">{imagePathList.length}/10</div>
                 </div>
               </button>
               <input
@@ -130,6 +159,7 @@ export const NewPost = () => {
             </div>
             {imagePathList.map((path) => (
               <img
+                key={path}
                 alt="Image"
                 src={path}
                 className="h-20 w-20 rounded-md border-[1px] border-text-placeHolder"
@@ -221,7 +251,6 @@ export const NewPost = () => {
         <button
           type="submit"
           className="mt-10 h-16 w-full rounded-lg bg-primary-main py-4 text-center"
-          onClick={onClick}
         >
           <span className="text-lg font-medium text-white">제출하기</span>
         </button>
