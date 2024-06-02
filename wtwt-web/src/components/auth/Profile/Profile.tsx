@@ -9,6 +9,7 @@ import { InputForHook } from '@component/components/common/Input/InputForHook';
 import { RadioForHook, RadioGroup } from '@component/components/common/Radio';
 import { DateSelector } from '@component/components/common/DateSelector';
 import { FaUserCircle } from 'react-icons/fa';
+import axios, { AxiosError } from 'axios';
 
 export interface IProfileForm {
   nickname: string;
@@ -22,6 +23,8 @@ export const Profile = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedImagePath, setSelectedImagePath] = useState<string | null>(null);
   const [isClicked, setIsClicked] = useState(false);
+  const [duplicatedMessage, setDuplicatedMessage] = useState('');
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
@@ -29,6 +32,7 @@ export const Profile = () => {
     register,
     control,
     formState: { errors },
+    getValues,
     handleSubmit,
     setError,
   } = useForm<IProfileForm>({ mode: 'onBlur', defaultValues: { gender: 'FEMALE' } });
@@ -49,6 +53,26 @@ export const Profile = () => {
     }
     setIsClicked(false);
   };
+
+  const handleDuplicatedClick = useCallback(async () => {
+    try {
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_API_KEY + '/api/v1/users/nickname/check',
+        { nickname: getValues('nickname') },
+      );
+      const { isDuplicated } = response.data;
+
+      if (!isDuplicated) {
+        setDuplicatedMessage('중복 닉네임 여부가 확인되었습니다.');
+        setIsNicknameChecked(true);
+      } else {
+        setIsNicknameChecked(false);
+        setDuplicatedMessage('이미 존재하는 닉네임입니다.');
+      }
+    } catch (e) {
+      console.log((e as AxiosError).message);
+    }
+  }, [getValues('nickname')]);
 
   // 이미지 입력창 열기
   const openImageInput = () => {
@@ -89,12 +113,29 @@ export const Profile = () => {
                 onChange={handleImageSelect}
               />
             </div>
-            <InputForHook
-              label="닉네임"
-              register={register('nickname')}
-              placeholder="닉네임을 입력해주세요"
-              errorMessage={errors.nickname?.message}
-            />
+            <div className="mb-2 flex flex-col">
+              <InputForHook
+                label="닉네임"
+                register={register('nickname')}
+                placeholder="닉네임을 입력해주세요"
+                errorMessage={errors.nickname?.message}
+              />
+              <div className="flex flex-row items-center gap-3">
+                <button
+                  type="button"
+                  className={`rounded-md  p-2 text-sm  shadow-md ${!isNicknameChecked ? 'bg-primary-background text-text-inputLabel' : 'bg-primary-subMain text-white'}`}
+                  onClick={handleDuplicatedClick}
+                >
+                  중복 이메일 확인
+                </button>
+                <p
+                  className={`text-sm ${isNicknameChecked ? 'text-primary-main' : 'text-red-500'}`}
+                >
+                  {duplicatedMessage}
+                </p>
+              </div>
+            </div>
+
             <InputForHook
               label="한줄 소개"
               register={register('statusMessage')}
