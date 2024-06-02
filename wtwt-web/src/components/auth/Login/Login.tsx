@@ -46,6 +46,8 @@ export const Login = () => {
       if (accessToken) localStorage.setItem('accessToken', accessToken);
       if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
 
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
       router.push('/home');
     } catch (e) {
       const errorResponse = (e as AxiosError).response;
