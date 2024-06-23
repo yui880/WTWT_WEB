@@ -3,7 +3,7 @@ import { FaRegBell } from 'react-icons/fa6';
 import { IoSearch } from 'react-icons/io5';
 import { Dropdown } from '@component/components/common/Dropdown';
 
-const categoryList = [
+export const categoryList = [
   {
     id: 1,
     name: '전체',

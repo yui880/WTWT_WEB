@@ -3,16 +3,17 @@ import { type ChangeEvent, useCallback, useState } from 'react';
 import { Button } from '@component/components/common/Button';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import axios, { AxiosError } from 'axios';
 export const Login = () => {
   const height = window.innerHeight;
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const router = useRouter();
   const updateInputHandler = (inputType: string, e: ChangeEvent<HTMLInputElement>) => {
     switch (inputType) {
-      case 'id':
-        setId(e.target.value);
+      case 'email':
+        setEmail(e.target.value);
         break;
       case 'password':
         setPassword(e.target.value);
@@ -24,9 +25,36 @@ export const Login = () => {
     router.push('/auth/signup');
   };
 
-  const canSubmit = id !== '' && password !== '';
+  const canSubmit = email !== '' && password !== '';
 
-  const submitHandler = useCallback(() => {}, [id, password]);
+  const submitHandler = useCallback(async () => {
+    if (!email?.trim()) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    if (!password?.trim()) {
+      alert('비밀번호를 입력해주세요.');
+    }
+
+    try {
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_API_KEY + '/api/v1/auth/login/basic',
+        { email, password },
+      );
+
+      const { accessToken, refreshToken, user } = response.data;
+      if (accessToken) localStorage.setItem('accessToken', accessToken);
+      if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+      router.push('/home');
+    } catch (e) {
+      const errorResponse = (e as AxiosError).response;
+      console.log(errorResponse);
+      alert('존재하지 않는 이메일이거나 비밀번호가 일치하지 않습니다.');
+    }
+  }, [email, password]);
 
   return (
     <div className="h-dvh w-full bg-white font-Pretendard" style={{ height: `${height}px` }}>
@@ -38,9 +66,9 @@ export const Login = () => {
           <Input
             label="이메일 주소"
             placeholder="이메일을 입력해주세요"
-            value={id}
+            value={email}
             onChange={(val) => {
-              updateInputHandler('id', val);
+              updateInputHandler('email', val);
             }}
           />
           <Input
